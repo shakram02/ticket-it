@@ -1,20 +1,64 @@
 import express, { Application, Request, Response } from "express";
 import dotenv from "dotenv";
-import connectDB from "./db";
+import { join } from "path";
+import morgaan from "morgan";
+import connectDB from "./config/db";
+import exphbs from "express-handlebars";
+import router from "./routes/index";
 
+const CONFIG_PATH = "./config/config.env";
 
-const app: Application = express();
-// Load config
-dotenv.config({ path: "./config/config.env" });
-const PORT = process.env.PORT;
+class App {
+    public setupApp(): Application {
+        this.setupConfig();
+        this.setupDB();
+        const app = this.setupExpress();
+        this.setupLogger(app);
+        this.setupHandlebars(app);
+        this.setupStaticFolder(app);
 
-const add = (a: number, b: number) => a + b;
-app.get("/", (req: Request, res: Response) => {
-    res.send(`Hello worrrr ${add(2, 3)}`);
-})
+        return app;
+    }
 
-connectDB();
+    private setupConfig() {
+        // Load config
+        dotenv.config({ path: CONFIG_PATH });
+    }
 
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT} in ${process.env.NODE_ENV}`);
-});
+    private setupDB() {
+        connectDB();
+    }
+
+    private setupExpress(): Application {
+        return express();
+    }
+
+    // Enable logging
+    private setupLogger(app: Application) {
+        if (process.env.NODE_ENV != "dev") return;
+        app.use(morgaan("dev"));
+    }
+
+    private setupHandlebars(app: Application) {
+        // Handlebars
+        app.engine(".hbs", exphbs({ extname: '.hbs', defaultLayout: 'main' }));
+        app.set("view engine", ".hbs");
+    }
+
+    private setupStaticFolder(app: Application) {
+        app.use(express.static(join(__dirname, "..", "public")))
+    }
+    public startExpress(app: Application) {
+        const PORT = process.env.PORT;
+        app.use(router);
+
+        // Start server
+        app.listen(PORT, () => {
+            console.log(`Listening on port ${PORT} in ${process.env.NODE_ENV}`);
+        });
+    }
+}
+
+const application = new App();
+const app = application.setupApp();
+application.startExpress(app);
