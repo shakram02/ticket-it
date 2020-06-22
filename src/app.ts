@@ -16,7 +16,7 @@ class App {
         this.setupLogger(app);
         this.setupHandlebars(app);
         this.setupStaticFolder(app);
-
+        this.setupBodyParser(app);
         return app;
     }
 
@@ -48,6 +48,11 @@ class App {
     private setupStaticFolder(app: Application) {
         app.use(express.static(join(__dirname, "..", "public")))
     }
+
+    private setupBodyParser(app: Application) {
+        app.use(express.urlencoded({ extended: false }));
+    }
+
     public startExpress(app: Application) {
         const PORT = process.env.PORT;
         app.use(router);
