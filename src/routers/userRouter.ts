@@ -1,21 +1,19 @@
-import express from "express";
-import { postRegisterUser } from "../controllers/userController";
-import passport from "passport";
-import { Response } from "express";
+import express from 'express';
+import passport from 'passport';
+import { postRegisterUser } from '../controllers/userController';
+
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.send("USER ROUTER HERE!");
+router.get('/', (req, res) => {
+  res.send('USER ROUTER HERE!');
 });
 
-router.get("/me", (req, res) => {
-    res.send("Welcome user.");
-
+router.get('/me', (req, res) => {
+  res.send('Welcome user.');
 });
 
-router.post("/register", postRegisterUser);
+router.post('/register', postRegisterUser);
 
-router.post("/login", passport.authenticate("local",
-    { successRedirect: "/", failureRedirect: "/users/login" })
-);
+router.post('/login', passport.authenticate('local',
+  { successRedirect: '/', failureRedirect: '/users/login' }));
 export default router;

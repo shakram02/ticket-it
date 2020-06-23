@@ -1,41 +1,37 @@
-import { PassportStatic } from "passport";
-import { User, IUser, verifyPassword } from "../models/User";
-import passportLocal from "passport-local";
+import { PassportStatic } from 'passport';
+import passportLocal from 'passport-local';
+import { Document } from 'mongoose';
+import { User, IUser, verifyPassword } from '../models/User';
 
 const LocalStrategy = passportLocal.Strategy;
 
-
 function setupSerializeUser(passport: PassportStatic) {
-    passport.serializeUser((user: IUser, done) => done(null, user.id));
+  passport.serializeUser((user: Document, done) => done(null, user.id));
 }
 
 function setupDeserializeUser(passport: PassportStatic) {
-    passport.deserializeUser((id, done) =>
-        User.findById(id, (err, user) => done(err, user))
-    );
+  passport.deserializeUser((id, done) => User.findById(id, (err, user) => done(err, user)));
 }
 
 function setupStrategy(passport: PassportStatic) {
-    let strategyConfig = {
-        usernameField: "email",
-        passwordField: "password"
-    };
+  const strategyConfig = {
+    usernameField: 'email',
+    passwordField: 'password',
+  };
 
-    let verifyFunction = (email: string, password: string, done: Function) => {
-        User.findOne({ email: email }, function (err, user) {
-
-            if (err) { return done(err); }
-            if (!user) { return done(null, false); }
-            if (!verifyPassword(user, password)) { return done(null, false); }
-            console.log("AUTHENTICATION OK!", user);
-            return done(null, user);
-        });
-    }
-    passport.use(new LocalStrategy(strategyConfig, verifyFunction));
+  const verifyFunction = (email: string, password: string, done: Function) => {
+    User.findOne({ email }, (err, user: IUser) => {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (!verifyPassword(user, password)) { return done(null, false); }
+      return done(null, user);
+    });
+  };
+  passport.use(new LocalStrategy(strategyConfig, verifyFunction));
 }
 
-export function setupPassport(passport: PassportStatic) {
-    setupSerializeUser(passport);
-    setupDeserializeUser(passport);
-    setupStrategy(passport);
+export default function setupPassport(passport: PassportStatic) {
+  setupSerializeUser(passport);
+  setupDeserializeUser(passport);
+  setupStrategy(passport);
 }

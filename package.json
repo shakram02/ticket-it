@@ -5,7 +5,8 @@
   "scripts": {
     "start": "NODE_ENV=prod node dist/app.js",
     "dev": "NODE_ENV=dev nodemon src/app.ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +37,12 @@
     "@types/passport": "^1.0.3",
     "@types/passport-google-oauth20": "^2.0.3",
     "@types/passport-local": "^1.0.33",
+    "@typescript-eslint/eslint-plugin": "^3.4.0",
+    "@typescript-eslint/parser": "^3.4.0",
+    "eslint": "^7.3.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.21.2",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
