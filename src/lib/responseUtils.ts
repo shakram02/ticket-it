@@ -1,11 +1,9 @@
 import { Response } from "express";
 
 export function badRequest(res: Response, obj: any) {
-    res.statusCode = 400;
-    res.send(obj);
+    res.status(400).send(obj);
 }
 
 export function ok(res: Response, obj: any) {
-    res.statusCode = 200;
-    res.send(obj);
+    res.status(200).send(obj);
 }

@@ -7,7 +7,7 @@ import exphbs from "express-handlebars";
 import session from "express-session";
 import router from "./routers/indexRouter";
 import passport from "passport";
-import passportConfig from "./config/passport";
+import {setupPassport} from "./config/passport";
 
 
 const CONFIG_PATH = "./config/config.env";
@@ -72,7 +72,7 @@ class App {
     private setupPassport(app: Application) {
         app.use(passport.initialize());
         app.use(passport.session());
-        return new passportConfig(passport);
+        setupPassport(passport);
     }
 
     public startExpress(app: Application) {
