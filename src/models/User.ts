@@ -1,25 +1,31 @@
-import { Schema, Document, model, Model } from "mongoose";
-
+import { Schema, Document, model } from "mongoose";
 // Setup mongose user schema
 // https://stackoverflow.com/a/34482413/4422856
+import { check, validationResult } from "express-validator";
+import bcrypt from "bcryptjs";
+import passport from "passport";
 
 export interface IUserRegistrationData {
-    name: String;
-    email: String;
-    password: String;
-    passwordConfirmation: String;
+    name: string;
+    email: string;
+    password: string;
+    passwordConfirmation: string;
 }
 
-export function validateUserInput(userInput: IUserRegistrationData): Boolean {
+export function validateUserInput(userInput: IUserRegistrationData): string[] {
+    let errors: string[] = [];
+    // TODO: validate user input. express-validator.
+    return errors;
+}
 
-    // TODO: validate user input.
-    return true;
+export function verifyPassword(user: IUser, password: string) {
+    return bcrypt.compareSync(password, user.password);
 }
 
 export interface IUser extends Document {
-    name: String;
-    email: String;
-    password: String;
+    name: string;
+    email: string;
+    password: string;
     insertedAt: Date;
 };
 

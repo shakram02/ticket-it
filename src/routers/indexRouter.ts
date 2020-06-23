@@ -1,14 +1,12 @@
 import express from "express";
-import userRotuer from "./users";
+import userRotuer from "./userRouter";
 
 const router = express.Router();
 
 // @desc    Login/Landing
 // @route   GET /
 router.get("/", (req: express.Request, res: express.Response) => {
-    res.render('login', {
-        layout: "login"
-    });    // Handlebars
+    res.send("Owa");
 });
 
 // @desc    Dashboard

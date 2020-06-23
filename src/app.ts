@@ -4,9 +4,14 @@ import { join } from "path";
 import morgaan from "morgan";
 import connectDB from "./config/db";
 import exphbs from "express-handlebars";
-import router from "./routes/index";
+import session from "express-session";
+import router from "./routers/indexRouter";
+import passport from "passport";
+import passportConfig from "./config/passport";
+
 
 const CONFIG_PATH = "./config/config.env";
+// const MongoStore = mongo(session);
 
 class App {
     public setupApp(): Application {
@@ -17,6 +22,8 @@ class App {
         this.setupHandlebars(app);
         this.setupStaticFolder(app);
         this.setupBodyParser(app);
+        this.setupSession(app);
+        this.setupPassport(app);
         return app;
     }
 
@@ -51,6 +58,21 @@ class App {
 
     private setupBodyParser(app: Application) {
         app.use(express.urlencoded({ extended: false }));
+    }
+
+    private setupSession(app: Application) {
+        let sessionConfig = {
+            secret: process.env.SESSION_SECRET as string,
+            resave: false,
+            saveUninitialized: false
+        }
+        
+        app.use(session(sessionConfig));
+    }
+    private setupPassport(app: Application) {
+        app.use(passport.initialize());
+        app.use(passport.session());
+        return new passportConfig(passport);
     }
 
     public startExpress(app: Application) {
