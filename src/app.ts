@@ -19,7 +19,6 @@ class App {
         this.setupDB();
         const app = this.setupExpress();
         this.setupLogger(app);
-        this.setupHandlebars(app);
         this.setupStaticFolder(app);
         this.setupBodyParser(app);
         this.setupSession(app);
@@ -44,12 +43,6 @@ class App {
     private setupLogger(app: Application) {
         if (process.env.NODE_ENV != "dev") return;
         app.use(morgaan("dev"));
-    }
-
-    private setupHandlebars(app: Application) {
-        // Handlebars
-        app.engine(".hbs", exphbs({ extname: '.hbs', defaultLayout: 'main' }));
-        app.set("view engine", ".hbs");
     }
 
     private setupStaticFolder(app: Application) {
