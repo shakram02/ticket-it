@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import { postRegisterUser } from '../controllers/userController';
+import { postRegisterUser, getLogout } from '../controllers/userController';
 
 const router = express.Router();
 
@@ -12,8 +12,9 @@ router.get('/me', (req, res) => {
   res.send('Welcome user.');
 });
 
+router.get('/logout', getLogout);
 router.post('/register', postRegisterUser);
 
 router.post('/login', passport.authenticate('local',
-  { successRedirect: '/', failureRedirect: '/users/login' }));
+  { successRedirect: '/dashboard', failureRedirect: '/users/login' }));
 export default router;
