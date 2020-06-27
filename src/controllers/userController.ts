@@ -31,6 +31,11 @@ async function validateUserInput(req: Request): Promise<Result<ValidationError>>
   return validationResult(req);
 }
 
+export async function getLogout(req:Request, res:Response) {
+  req.logout();
+  res.redirect('/');
+}
+
 export async function postChangePassword(req:Request, res:Response) {
   throw new Error('Not implemented');
 }

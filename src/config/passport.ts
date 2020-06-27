@@ -1,6 +1,7 @@
 import { PassportStatic } from 'passport';
 import passportLocal from 'passport-local';
 import { Document } from 'mongoose';
+import { Request, Response } from 'express';
 import { User, IUser, verifyPassword } from '../models/User';
 
 const LocalStrategy = passportLocal.Strategy;
@@ -28,6 +29,14 @@ function setupStrategy(passport: PassportStatic) {
     });
   };
   passport.use(new LocalStrategy(strategyConfig, verifyFunction));
+}
+
+export function ensureAuthenticated(req:Request, res:Response, next:Function) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  return res.redirect('/');
 }
 
 export default function setupPassport(passport: PassportStatic) {
