@@ -1,5 +1,6 @@
 import express from 'express';
 import userRotuer from './userRouter';
+import eventRouter from './eventRouter';
 import { ensureAuthenticated } from '../config/passport';
 import { IUser } from '../models/User';
 
@@ -19,4 +20,5 @@ router.get('/dashboard', ensureAuthenticated, (req: express.Request, res: expres
 });
 
 router.use('/users', userRotuer);
+router.use('/events', ensureAuthenticated, eventRouter);
 export default router;

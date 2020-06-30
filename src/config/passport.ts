@@ -36,6 +36,7 @@ export function ensureAuthenticated(req:Request, res:Response, next:Function) {
     return next();
   }
 
+  // TODO: change this to JSON response.
   return res.redirect('/');
 }
 
